@@ -91,12 +91,11 @@ def read_commands():
       
                 try:
                     (response, welcoming_port, hostName) = parse_connect(command)                     
-                    welcoming_port = tokens[2] 
+                    print(response)
                     if ftp_control_connection is not None:
                         ftp_control_connection.close()
                                      
                     ftp_control_connection = create_control_connection(hostName, str(welcoming_port))  
-                    print(response)
                     process_connect(ftp_control_connection) 
                     connection_active = True
                 except Exception as e:
@@ -306,11 +305,11 @@ def process_get(ftp_control_connection, file_path, welcoming_port, retr_count):
 
     # Accept FTP-data connection
     try:
-
+        #TODO: make sure the same file is not read multiple times
         conn, addr = data_socket.accept()
         filename = f"retr_files/file{retr_count}"
         os.makedirs("retr_files", exist_ok=True)
-
+        
         with open(filename, "wb") as f:
             while True:
                 data = conn.recv(1024)
